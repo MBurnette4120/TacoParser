@@ -5,7 +5,7 @@ using GeoCoordinatePortable;
 
 namespace LoggingKata
 {
-    class Program
+    public class Program
     {
         static readonly ILog logger = new TacoLogger();
         const string csvPath = "TacoBell-US-AL.csv";
@@ -33,10 +33,14 @@ namespace LoggingKata
 
             // Now that your Parse method is completed, START BELOW ----------
 
-            // TODO: Create two `ITrackable` variables with initial values of `null`. These will be used to store your two taco bells that are the farthest from each other.
-            // Create a `double` variable to store the distance
+            // TODO: DONE  Create two `ITrackable` variables with initial values of `null`. These will be used to store your two taco bells that are the farthest from each other.
+            ITrackable tacoOne = null;
+            ITrackable tacoTwo = null;
+            // DONE  Create a `double` variable to store the distance
+            double distance = 0;
+            double toMiles = .000621371;
 
-            // Include the Geolocation toolbox, so you can compare locations: `using GeoCoordinatePortable;`
+            // DONE  Include the Geolocation toolbox, so you can compare locations: `using GeoCoordinatePortable;`
 
             //HINT NESTED LOOPS SECTION---------------------
             // Do a loop for your locations to grab each location as the origin (perhaps: `locA`)
@@ -46,10 +50,43 @@ namespace LoggingKata
             // Now, do another loop on the locations with the scope of your first loop, so you can grab the "destination" location (perhaps: `locB`)
 
             // Create a new Coordinate with your locB's lat and long
+            for (int i = 0; i < locations.Length; i++)
+            {
+                for (int j = 0; j < locations.Length; j++)
+                {
+                    var locA = new GeoCoordinate(locations[i].Location.Latitude, locations[i].Location.Longitude);
+                    var locB = new GeoCoordinate(locations[j].Location.Latitude, locations[j].Location.Longitude);
+
+                    var distBetween = (locA.GetDistanceTo(locB)) * toMiles;
+
+                    if (distBetween > distance)
+                    {
+                        tacoOne = locations[i];
+                        tacoTwo = locations[j];
+                        distance = distBetween;
+
+                    }
+                }
+
+            }
+
+
+
+
+
+
 
             // Now, compare the two using `.GetDistanceTo()`, which returns a double
             // If the distance is greater than the currently saved distance, update the distance and the two `ITrackable` variables you set above
-
+            Console.WriteLine($"The locations that are farthest away from each other are {tacoOne} and {tacoTwo}");
+            Console.WriteLine($"There is {Math.Round(distance, 2)} miles between them");
+            
+            
+            
+            
+            
+            
+            
             // Once you've looped through everything, you've found the two Taco Bells farthest away from each other.
 
 
